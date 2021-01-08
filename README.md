@@ -19,12 +19,9 @@ Ver programa [aquí](programa.pdf)
  
 ## Previo
 
- Tres cápsulas para trabajar de manera más adecuada la parte práctica del curso
-
-* [Instrucciones para hacer una cuenta en Rstudio.cloud](https://www.youtube.com/watch?v=Jcw146tEa5w)
+ Una cápsula para trabajar de manera más adecuada la parte práctica del curso
 
 * [Cápsula de introducción a R (opcional)](https://www.youtube.com/watch?v=HR2MXwrzt00)
 
-* [Importar repositorio a rstudio.cloud](https://www.youtube.com/watch?v=enYCTyXfgh0&feature=youtu.be)
 
 
