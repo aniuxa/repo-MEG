@@ -14,7 +14,7 @@ y aplicada, por lo cual se requiere la presencia, participación y lectura por p
 Que el estudiantado sea capaz de aplicar conceptos  estadísticos utilizando el paquete R a fuentes de información mexicanas y mundiales, con perspectiva de género 
 
 Ver programa [aquí](programa.pdf)
-
+ 
 ## Previo
 
  Tres cápsulas para trabajar de manera más adecuada la parte práctica del curso
