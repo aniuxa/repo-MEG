@@ -10,8 +10,8 @@ Dra.  Ana Ruth Escoto Castillo
 El curso es una introducción al uso de métodos cuantitativos aplicados a la investigación social, dirigido a estudiantes de la Maestría en Estudios de Género (MEG). La modalidad es teóricareflexiva
 y aplicada, por lo cual se requiere la presencia, participación y lectura por parte de las estudiantes
 
-## Objetivo general: 
-Que el estudiantado sea capaz de aplicar conceptos demográficos y estadísticos utilizando el paquete R a fuentes de información mexicanas y mundiales. 
+## Objetivo del taller: 
+Que el estudiantado sea capaz de aplicar conceptos  estadísticos utilizando el paquete R a fuentes de información mexicanas y mundiales, con perspectiva de género 
 
 Ver programa [aquí](programa.pdf)
 
