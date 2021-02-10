@@ -25,3 +25,8 @@ Ver programa [aquí](programa.pdf)
 
 
 
+## Práctica 1
+
+Introducción al programa y análisis univaridado
+
+[Práctica 1](P1.md) 
