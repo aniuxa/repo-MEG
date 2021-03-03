@@ -31,9 +31,9 @@ Introducción al programa y análisis univaridado
 
 [Práctica 1](P1.md) 
 
-Código de la clase (P1.R)
+[Código de la clase](P1.R)
 
-[Resolución Ejercicio 1] (https://rpubs.com/aniuxa/Ej12018)
+[Resolución Ejercicio 1](https://rpubs.com/aniuxa/Ej12018)
 
 ## Práctica 2
 
