@@ -31,6 +31,8 @@ Introducción al programa y análisis univaridado
 
 [Práctica 1](P1.md) 
 
+Código de la clase (P1.R)
+
 
 ## Práctica 2
 
