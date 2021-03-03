@@ -30,3 +30,10 @@ Ver programa [aquí](programa.pdf)
 Introducción al programa y análisis univaridado
 
 [Práctica 1](P1.md) 
+
+
+## Práctica 2
+
+Código + bivariado
+
+[Práctica 2](P2.R)
