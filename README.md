@@ -33,6 +33,7 @@ Introducción al programa y análisis univaridado
 
 Código de la clase (P1.R)
 
+[Resolución Ejercicio 1] (https://rpubs.com/aniuxa/Ej12018)
 
 ## Práctica 2
 
