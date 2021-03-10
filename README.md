@@ -40,3 +40,9 @@ Introducción al programa y análisis univaridado
 Código + bivariado
 
 [Práctica 2](P2.R)
+
+## Práctica 3
+
+Bivariado, factores y etiquetas
+
+[Práctica 3](P3.md)
