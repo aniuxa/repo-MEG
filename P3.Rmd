@@ -1,0 +1,524 @@
+---
+title: "Práctica 3. Manipulación de datos y tabulados"
+author: "AE"
+date: "10/03/2021"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Consejo para escribir "código""
+En general, cuando hacemos nuestro código querremos verificar que nuestras librerías estén instaladas. Si actualizamos nuestro R y Rstudio es probable (sobre todo en MAC) que hayamos perdido alguno.
+
+Este es un ejemplo de un código. Y vamos a introducir un paquete muy útil llamado "pacman"
+
+```{r}
+if (!require("pacman")) install.packages("pacman") # instala pacman si se requiere
+pacman::p_load(tidyverse, 
+               readxl,writexl,googlesheets4, # importar hojas de cálculo
+               haven, foreign, # importación de dta y sab
+               sjlabelled, # etiquetas
+               janitor, skimr, #carga los paquetes necesarios para esta práctica
+               curl) # problema de proxies 
+
+```
+
+# Importando más datos
+Si estas desde tu escritorio
+<i>¡Recuerda establecer tu directorio!</i>
+```{r 1}
+setwd("C:/Users/anaes/Dropbox/2021/MEG/repo-MEG")
+```
+
+Hay muchos formatos de almacenamiento de bases de datos. Vamos a aprender a importar información desde ellos.
+
+## Desde Excel 
+El paquete más compatible con RStudio es readxl. A veces, otros paquetes tienen más problemas de configuración entre R y el Java.
+
+```{r 3}
+ICI_2018 <- read_excel("./datos/ICI_2018.xlsx", sheet = "para_importar")
+#View(ICI_2018)
+```
+
+Como el nombre de paquete lo indica, sólo lee. Para escribir en este formato, recomiendo el paquete "writexl". Lo instalamos anteriormente.
+
+Si quisiéramos exportar un objeto a Excel
+```{r 5}
+write_xlsx(ICI_2018, path = "Mi_Exportación.xlsx")
+```
+
+## Desde google
+
+También podemos importar archivos de "google sheets", utilizamos el paquete "googlesheets4". Más sobre este paquete lo podemos revisar acá <https://github.com/tidyverse/googlesheets4>.
+
+Debemos tener el link de "edición" del archivo y debe ser público, o debemos de tener permiso con la cuenta que vamos autenticar:
+
+```{r}
+ej_google<-read_sheet("https://docs.google.com/spreadsheets/d/1gGEug2SgA8G1cOCSrmzkt4bmFYTZmpmz8UR4CpquRcI/edit#gid=0")
+
+```
+
+![permiso](permiso.png)
+
+Es decir, necesitas una cuenta de la suite de google para hacer este proceso.
+
+
+### Actividad 1 en clase
+¡Importa tu mismo la base de datos ICI_2018, está en la carpeta de datos!
+
+
+## Desde STATA y SPSS
+
+Si bien también se puede realizar desde el paquete foreign. Pero este no importa algunas características como las etiquetas y tampoco funciona con las versiones más nuevas de STATA. Vamos a instalar otro paquete, compatible con el mundo tidyverse. 
+
+Recuerda que no hay que instalarlo (viene adentro de tidyverse). Se instalasólo la primera vez. Una vez instalado un paquete, lo llamamos con el comando "library"
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample <- read_dta("./datos/BD_MUJERES_ENDIREH2016_sample.dta")
+```
+
+!Importante, a R no le gustan los objetos con nombres que empiezan en números
+
+El paquete haven sí exporta información.
+```{r}
+write_dta(BD_MUJERES_ENDIREH2016_sample, "./datos/mi_exportación.dta", version = 12)
+```
+
+Con SSPS es muy parecido. Dentro de "haven" hay una función específica para ello. 
+
+```{r}
+encevi_hogar<- read_sav("./datos/encevi_hogar.sav")
+
+```
+
+Para escribir
+```{r}
+write_sav(BD_MUJERES_ENDIREH2016_sample , "mi_exportacion.sav")
+```
+
+Checa que en todas las exportaciones en los nombres hay que incluir la extensión del programa. Si quieres guardar en un lugar diferente al directorio del trabajo, hay que escribir toda la ruta dentro de la computadora.
+
+## Revisión de nuestra base
+Vamos a revisar la base, brevemente la base
+
+```{r}
+class(BD_MUJERES_ENDIREH2016_sample) # tipo de objeto
+names(BD_MUJERES_ENDIREH2016_sample) # lista las variables
+head(BD_MUJERES_ENDIREH2016_sample) # muestra las primeras 6 líneas
+table(BD_MUJERES_ENDIREH2016_sample$sit_conyugal) # un tabulado simple
+```
+
+## Revisión con dplyr
+```{r}
+library(dplyr) 
+```
+
+Operador de "pipe" o "tubería" %>% (Ctrl+Shift+M)
+Antes de continuar, presentemos el operador "pipe" %>%. dplyr importa este operador de otro paquete (magrittr). 
+Este operador le permite canalizar la salida de una función a la entrada de otra función. En lugar de funciones de anidamiento (lectura desde adentro hacia afuera), la idea de la tubería es leer las funciones de izquierda a derecha.
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+    select(sexo, edad) %>% 
+    head
+```
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+    select(sexo, edad) %>% 
+    glimpse
+```
+
+## Revisión con skimr
+
+"skimr" es un paquete nos permite tener una perspectiva de nuestra base de datos. Dependiendo del tipo de variable nos da diferentes elementos. La aplicaremos a nuestra base de la ecovid
+
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+    skim()
+```
+
+### Actividad durante la clase
+
+Aplica el comando skimr a la base que importaste ICI_2018.
+
+## Limpieza de nombres
+
+Primero lo haremos con "janitor" en poco tiempo ha llegado a ser uno de mis paquetes favoritos, por sus funciones de limpieza de datos, también lo usaremos para tablas. 
+
+La función "clean_names" nos permite limpiar los nombre. 
+Primero busquemos la ayuda de este comando
+```{r}
+help(clean_names)
+```
+O podemos checar los métodos por aquí
+<https://www.rdocumentation.org/packages/janitor/versions/1.2.1/topics/clean_names>
+
+Vamos a limpiar nuestra base descargada desde google:
+
+```{r}
+base_limpia<-ej_google %>% 
+  clean_names() # por default, usa "snake"
+```
+
+
+```{r}
+base_limpia <- ej_google %>% 
+  clean_names(case="screaming_snake") # all caps
+```
+
+
+
+```{r}
+base_limpia <- ej_google %>% 
+  clean_names(case="screaming_snake") # all caps
+names(base_limpia)
+```
+
+También podemos incluir prefijos
+
+```{r}
+base_limpia <- ej_google %>% 
+  clean_names(case="screaming_snake", prefix="ICE_") # all caps
+names(base_limpia)
+
+```
+
+... y sufijos
+
+```{r}
+base_limpia <- ej_google %>% 
+  clean_names(case="screaming_snake", postfix="_ICE") # all caps
+names(base_limpia)
+
+```
+
+
+### Actividad en clase
+Limpia los nombre de la base ICI_2018, elije un case específico que no sea el del ejemplo
+
+
+## Ojeando
+```{r}
+glimpse(BD_MUJERES_ENDIREH2016_sample)
+glimpse(BD_MUJERES_ENDIREH2016_sample[,1:10]) # en corchete del lado derecho podemos ojear columnas 
+
+```
+
+## Selección de casos y de variables
+Poco a poco vamos comprendiendo más la lógica de R. Hay varias "formas" de programar. Por lo que no te asustes si varios códigos llegan al mismo resultado
+
+Para revisar el contenido de un data frame podemos usar, como lo hicimos anteriormente, el formato basededatos$var o usar corchete, checa como estas cuatro formas tan el mismo resultado.
+
+```{r}
+x<-BD_MUJERES_ENDIREH2016_sample$niv
+x<-BD_MUJERES_ENDIREH2016_sample[["niv"]]  # ¡Ojo con las comillas! 
+x<-BD_MUJERES_ENDIREH2016_sample[,25]
+x<-BD_MUJERES_ENDIREH2016_sample[,"niv"]
+
+```
+
+Ahora, con el formato de dplyr podemos llegar a lo mismo
+```{r}
+x<-BD_MUJERES_ENDIREH2016_sample %>% 
+  select(niv)
+```
+
+
+## Selección "inversa"
+O sea no "botar algo", es con el negativo. No funciona con todos los formatos
+```{r}
+x<-BD_MUJERES_ENDIREH2016_sample %>% 
+  select(-niv)
+x<-BD_MUJERES_ENDIREH2016_sample[,-25]
+
+rm(x) #rm sólo bota objetos
+```
+
+Pero con los otros formatos podemos "asignar" valores adentro de un data.frame, y uno de eso valores puede ser "la nada""
+```{r}
+BD_MUJERES_ENDIREH2016_sample$niv_2<-BD_MUJERES_ENDIREH2016_sample$niv
+BD_MUJERES_ENDIREH2016_sample$niv_2<-NULL
+
+```
+
+De aquí viene esa cuesta en el aprendizaje; tenemos que comprender en qué forma programó el que hizo la librería e incluso a veces cómo aprendió quién te está enseñando o el foro que estás leyendo.
+
+# Subsetting 
+Rara vez utilizamos una base de datos completa, y rara vez queremos hacer operaciones completas con ellas.
+
+Vamos a pedir cosas más específicas y podemos seleccionar observaciones o filas. Como nuestra base de datos es muy grande, guardaremos el filtro o selección en un objeto.
+
+```{r}
+subset1<-BD_MUJERES_ENDIREH2016_sample[BD_MUJERES_ENDIREH2016_sample$niv>4,]
+```
+
+También podemos seleccionar columnas
+```{r}
+subset2<- BD_MUJERES_ENDIREH2016_sample[, c("sexo", "edad", "niv")]
+```
+
+podemos combinar los dos tipos de selección
+```{r}
+subset3<- BD_MUJERES_ENDIREH2016_sample[(BD_MUJERES_ENDIREH2016_sample$niv>4 & BD_MUJERES_ENDIREH2016_sample$sexo==2 ), c("sexo", "edad", "niv")]
+```
+
+
+Con dplyr, podemos usar "filter" y "select"
+
+```{r}
+
+subset4<-BD_MUJERES_ENDIREH2016_sample %>% 
+  filter(niv>4 & sexo==1) %>%
+    select(sexo, edad, niv)
+```
+
+
+
+
+# Tabulados con tabyl()
+Ya hemos utilizado el comando tabyl para hacer tabulados, pero no los hemos "enchulado"
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>%
+  tabyl(sexo)
+```
+
+Para ver que esto es una distribución de frecuencias sería muy útil ver la proporción total, ello se realiza agregando un elemento más en nuestro código con una "tubería":
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>%
+  tabyl(sexo) %>%
+  adorn_totals() #primer enchulamiento
+```
+
+Ahora, las proporciones son raras, y preferimos por los porcentajes.
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>%
+  tabyl(sexo) %>% # para hacer la tabla
+  adorn_totals() %>% # añade totales
+  adorn_pct_formatting()  # nos da porcentaje en lugar de proporción
+                
+```
+
+
+
+Vamos a darle una "ojeada" a esta variable
+```{r}
+glimpse(BD_MUJERES_ENDIREH2016_sample$niv)
+```
+
+## Ejemplo de etiquetado
+
+Es más fácil crear un objeto de cadena con las etiquetadas ordenadas.
+
+Una corta:
+
+```{r}
+sexo.lab<-c("Hombre", "Mujer")
+
+BD_MUJERES_ENDIREH2016_sample$sexo<-set_labels(BD_MUJERES_ENDIREH2016_sample$sexo, labels=sexo.lab) # establece las etiquetas
+```
+
+
+Una larga:
+```{r}
+
+
+niv.shortlab <- c("Ninguna", "Preescolar", "Primaria", "Secundaria", "Prepa", "Técnico -pri", "Técnico -sec", "Normal", "Normal-lic", "Licenciatura", "Posgrado") #Vector de etiquetas cortas.
+
+BD_MUJERES_ENDIREH2016_sample$niv<-set_labels(BD_MUJERES_ENDIREH2016_sample$niv, labels=niv.shortlab) # establece las etiquetas
+
+```
+
+
+Hoy hacemos la tabla, con las etiquetas:
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% mutate(niv=as_label(niv)) %>% #esto sólo si hay etiquetas declaradas, recuerda
+                tabyl(niv)
+```
+
+
+Para que no nos salgan las categorías sin datos podemos poner una opción dentro del comando "tabyl()"
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  mutate(niv=as_label(niv)) %>% 
+                tabyl(niv, show_missing_levels=F ) %>% # esta opción elimina los valores con 0
+                adorn_totals()  
+```
+
+
+### Cálculo de frecuencias
+
+Las tablas de doble entrada tiene su nombre porque en las columnas entran los valores de una variable categórica, y en las filas de una segunda. Basicamente es como hacer un conteo de todas las combinaciones posibles entre los valores de una variable con la otra. 
+
+Por ejemplo, si quisiéramos combinar las dos variables que ya estudiamos lo podemos hacer, con una tabla de doble entrada:
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  mutate(niv=as_label(niv)) %>% # para que las lea como factor
+  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
+                tabyl(niv, sexo, show_missing_levels=F ) %>% # incluimos aquí 
+                adorn_totals()  
+```
+
+Observamos que en cada celda confluyen los casos que comparten las mismas características:
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>%   
+    count(niv==1 & sexo==1) # nos da la segunda celda de la izquierda
+
+```
+
+### Totales y porcentajes
+
+De esta manera se colocan todos los datos. Si observa al poner la función "adorn_totals()" lo agregó como una nueva fila de totales, pero también podemos pedirle que agregue una columna de totales. 
+
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  mutate(niv=as_label(niv)) %>% # para que las lea como factor
+  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
+    tabyl(niv, sexo, show_missing_levels=F ) %>% # incluimos aquí sexoo
+                adorn_totals("col")  
+```
+
+O bien agregar los dos, introduciendo en el argumento "c("col", "row")" un vector de caracteres de las dos opciones requeridas:
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  mutate(niv=as_label(niv)) %>% # para que las lea como factor
+  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
+                tabyl(niv, sexo, show_missing_levels=F ) %>% # incluimos aquí sexoo
+                adorn_totals(c("col", "row")) 
+```
+
+Del mismo modo, podemos calcular los porcentajes. Pero los podemos calcular de tres formas. Uno es que lo calculemos para los totales calculados para las filas, para las columnas o para el gran total poblacional. 
+
+Para columnas tenemos el siguiente código y los siguientes resultados:
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  mutate(niv=as_label(niv)) %>% # para que las lea como factor
+  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
+  tabyl(niv, sexo, show_missing_levels=F ) %>% # incluimos aquí sexo
+                adorn_totals(c("col", "row")) %>% 
+                adorn_percentages("col") %>% # Divide los valores entre el total de la columna
+                adorn_pct_formatting() # lo vuelve porcentaje
+```
+
+Cuando se hagan cuadros de distribuciones (que todas sus partes suman 100), los porcentajes pueden ser una gran ayuda para la interpretación, sobre todos cuando se comparar poblaciones de categorías de diferente tamaño. Por lo general, queremos que los cuadros nos den información de donde están los totales y su 100%, de esta manera el lector se puede guiar de porcentaje con respecto a qué está leyendo. En este caso, vemos que el 100% es común en la última fila. 
+
+Veamos la diferencia de cómo podemos leer la misma celda, pero hoy, hemos calculado los porcentajes a nivel de fila:
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  mutate(niv=as_label(niv)) %>% # para que las lea como factor
+  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
+                tabyl(niv, sexo, show_missing_levels=F ) %>% 
+                adorn_totals(c("col", "row")) %>% 
+                adorn_percentages("row") %>% # Divide los valores entre el total de la fila
+                adorn_pct_formatting() # lo vuelve porcentaje
+```
+
+
+Finalmente, podemos calcular los porcentajes con referencia a la población total en análisis. Es decir la celda en la esquina inferior derecha de nuestra tabla original.
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  mutate(niv=as_label(niv)) %>% # para que las lea como factor
+  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
+                tabyl(niv, sexo, show_missing_levels=F ) %>% # incluimos aquí sexoo
+                adorn_totals(c("col", "row")) %>% 
+                adorn_percentages("all") %>% # Divide los valores entre el total de la población
+                adorn_pct_formatting() # lo vuelve porcentaje
+```
+
+
+# Descriptivos para variables cuantitativas
+Vamos a empezar a revisar los gráficos para variables cuantitativas.
+
+## Medidas numéricas básicas
+5 números
+
+```{r}
+summary(BD_MUJERES_ENDIREH2016_sample$income_xx) ## ingresos mujeres (por trabajo)
+```
+
+Con pipes se pueden crear "indicadores" de nuestras variables es un tibble
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  summarise(nombre_indicador=mean(income_xx, na.rm=T))
+```
+
+
+# Factores de expansión 
+
+## La función tally
+
+El comando "tabyl()" del paquete "janitor" es muy útil pero no es compatible con los factores del expansión. En realidad, tabyl() nos ahorra un poco el hecho de tener que agrupar nuestra base en categorías y luego hacer un conteo para cada una de ellas. "tally()" es un comando que nos hace ese conteo y "group_by" nos agrupa las observaciones de nuestra base de datos para hacer cualquier operación. 
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+ group_by(as_label(sexo)) %>% 
+  tally(fac_viv) %>% #nombre del factor
+   adorn_totals()  # Agrega total
+```
+
+Podemos usar funciones de tabyl
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+ group_by(as_label(sexo)) %>% 
+  tally(fac_viv) %>% #nombre del factor
+   adorn_totals() %>% # Agrega total
+     adorn_percentages("all")  %>% 
+      adorn_pct_formatting()
+```
+
+
+## Otras formas
+La función "count()" también permite dar pesos
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  count(sexo, niv,  wt = fac_viv) 
+
+```
+
+Es compatible con etiquetas
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  count(as_label(sexo), as_label(niv),  wt = fac_viv) 
+```
+
+Podemos mover un poquito con pivot_wider para que se vea más a lo que acostumbramos a una tabla de frecuencias
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  mutate_at(vars(sexo, niv), as_label) %>% 
+  count(sexo, niv,  wt = fac_viv) %>% 
+  pivot_wider(names_from = sexo, 
+              values_from = n)
+```
+
+```{r}
+BD_MUJERES_ENDIREH2016_sample %>% 
+  mutate_at(vars(sexo, niv), as_label) %>% # otra forma de mutate y as_label
+  count(sexo, niv,  wt = fac_viv) %>% 
+  pivot_wider(names_from = sexo, 
+              values_from = n) %>%
+   adorn_totals() %>% # Agrega total
+     adorn_percentages("col")  %>% 
+      adorn_pct_formatting()
+```
+
+
