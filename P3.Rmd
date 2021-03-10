@@ -127,13 +127,13 @@ Este operador le permite canalizar la salida de una función a la entrada de otr
 
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
-    select(sexo, edad) %>% 
+    select(sit_conyugal, edad) %>% 
     head
 ```
 
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
-    select(sexo, edad) %>% 
+    select(sit_conyugal, edad) %>% 
     glimpse
 ```
 
@@ -264,12 +264,12 @@ subset1<-BD_MUJERES_ENDIREH2016_sample[BD_MUJERES_ENDIREH2016_sample$niv>4,]
 
 También podemos seleccionar columnas
 ```{r}
-subset2<- BD_MUJERES_ENDIREH2016_sample[, c("sexo", "edad", "niv")]
+subset2<- BD_MUJERES_ENDIREH2016_sample[, c("sit_conyugal", "edad", "niv")]
 ```
 
 podemos combinar los dos tipos de selección
 ```{r}
-subset3<- BD_MUJERES_ENDIREH2016_sample[(BD_MUJERES_ENDIREH2016_sample$niv>4 & BD_MUJERES_ENDIREH2016_sample$sexo==2 ), c("sexo", "edad", "niv")]
+subset3<- BD_MUJERES_ENDIREH2016_sample[(BD_MUJERES_ENDIREH2016_sample$niv>4 & BD_MUJERES_ENDIREH2016_sample$sit_conyugal==2 ), c("sit_conyugal", "edad", "niv")]
 ```
 
 
@@ -278,8 +278,8 @@ Con dplyr, podemos usar "filter" y "select"
 ```{r}
 
 subset4<-BD_MUJERES_ENDIREH2016_sample %>% 
-  filter(niv>4 & sexo==1) %>%
-    select(sexo, edad, niv)
+  filter(niv>4 & sit_conyugal==1) %>%
+    select(sit_conyugal, edad, niv)
 ```
 
 
@@ -290,13 +290,13 @@ Ya hemos utilizado el comando tabyl para hacer tabulados, pero no los hemos "enc
 
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>%
-  tabyl(sexo)
+  tabyl(sit_conyugal)
 ```
 
 Para ver que esto es una distribución de frecuencias sería muy útil ver la proporción total, ello se realiza agregando un elemento más en nuestro código con una "tubería":
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>%
-  tabyl(sexo) %>%
+  tabyl(sit_conyugal) %>%
   adorn_totals() #primer enchulamiento
 ```
 
@@ -304,7 +304,7 @@ Ahora, las proporciones son raras, y preferimos por los porcentajes.
 
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>%
-  tabyl(sexo) %>% # para hacer la tabla
+  tabyl(sit_conyugal) %>% # para hacer la tabla
   adorn_totals() %>% # añade totales
   adorn_pct_formatting()  # nos da porcentaje en lugar de proporción
                 
@@ -324,9 +324,11 @@ Es más fácil crear un objeto de cadena con las etiquetadas ordenadas.
 Una corta:
 
 ```{r}
-sexo.lab<-c("Hombre", "Mujer")
+sit_conyugal.lab<-c("unionlibre", "separada", 
+                    "divorciada", "viuda",
+                    "casada", "soltera")
 
-BD_MUJERES_ENDIREH2016_sample$sexo<-set_labels(BD_MUJERES_ENDIREH2016_sample$sexo, labels=sexo.lab) # establece las etiquetas
+BD_MUJERES_ENDIREH2016_sample$sit_conyugal<-set_labels(BD_MUJERES_ENDIREH2016_sample$sit_conyugal, labels=sit_conyugal.lab) # establece las etiquetas
 ```
 
 
@@ -368,8 +370,8 @@ Por ejemplo, si quisiéramos combinar las dos variables que ya estudiamos lo pod
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
   mutate(niv=as_label(niv)) %>% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
-                tabyl(niv, sexo, show_missing_levels=F ) %>% # incluimos aquí 
+  mutate(sit_conyugal=as_label(sit_conyugal)) %>% # para que las lea como factor
+                tabyl(niv, sit_conyugal, show_missing_levels=F ) %>% # incluimos aquí 
                 adorn_totals()  
 ```
 
@@ -377,7 +379,7 @@ Observamos que en cada celda confluyen los casos que comparten las mismas caract
 
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>%   
-    count(niv==1 & sexo==1) # nos da la segunda celda de la izquierda
+    count(niv==1 & sit_conyugal==1) # nos da la segunda celda de la izquierda
 
 ```
 
@@ -389,8 +391,8 @@ De esta manera se colocan todos los datos. Si observa al poner la función "ador
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
   mutate(niv=as_label(niv)) %>% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
-    tabyl(niv, sexo, show_missing_levels=F ) %>% # incluimos aquí sexoo
+  mutate(sit_conyugal=as_label(sit_conyugal)) %>% # para que las lea como factor
+    tabyl(niv, sit_conyugal, show_missing_levels=F ) %>% # incluimos aquí sit_conyugalo
                 adorn_totals("col")  
 ```
 
@@ -399,8 +401,8 @@ O bien agregar los dos, introduciendo en el argumento "c("col", "row")" un vecto
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
   mutate(niv=as_label(niv)) %>% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
-                tabyl(niv, sexo, show_missing_levels=F ) %>% # incluimos aquí sexoo
+  mutate(sit_conyugal=as_label(sit_conyugal)) %>% # para que las lea como factor
+                tabyl(niv, sit_conyugal, show_missing_levels=F ) %>% # incluimos aquí sit_conyugalo
                 adorn_totals(c("col", "row")) 
 ```
 
@@ -410,8 +412,8 @@ Para columnas tenemos el siguiente código y los siguientes resultados:
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
   mutate(niv=as_label(niv)) %>% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
-  tabyl(niv, sexo, show_missing_levels=F ) %>% # incluimos aquí sexo
+  mutate(sit_conyugal=as_label(sit_conyugal)) %>% # para que las lea como factor
+  tabyl(niv, sit_conyugal, show_missing_levels=F ) %>% # incluimos aquí sit_conyugal
                 adorn_totals(c("col", "row")) %>% 
                 adorn_percentages("col") %>% # Divide los valores entre el total de la columna
                 adorn_pct_formatting() # lo vuelve porcentaje
@@ -423,8 +425,8 @@ Veamos la diferencia de cómo podemos leer la misma celda, pero hoy, hemos calcu
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
   mutate(niv=as_label(niv)) %>% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
-                tabyl(niv, sexo, show_missing_levels=F ) %>% 
+  mutate(sit_conyugal=as_label(sit_conyugal)) %>% # para que las lea como factor
+                tabyl(niv, sit_conyugal, show_missing_levels=F ) %>% 
                 adorn_totals(c("col", "row")) %>% 
                 adorn_percentages("row") %>% # Divide los valores entre el total de la fila
                 adorn_pct_formatting() # lo vuelve porcentaje
@@ -436,8 +438,8 @@ Finalmente, podemos calcular los porcentajes con referencia a la población tota
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
   mutate(niv=as_label(niv)) %>% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %>% # para que las lea como factor
-                tabyl(niv, sexo, show_missing_levels=F ) %>% # incluimos aquí sexoo
+  mutate(sit_conyugal=as_label(sit_conyugal)) %>% # para que las lea como factor
+                tabyl(niv, sit_conyugal, show_missing_levels=F ) %>% # incluimos aquí sit_conyugalo
                 adorn_totals(c("col", "row")) %>% 
                 adorn_percentages("all") %>% # Divide los valores entre el total de la población
                 adorn_pct_formatting() # lo vuelve porcentaje
@@ -469,16 +471,16 @@ El comando "tabyl()" del paquete "janitor" es muy útil pero no es compatible co
 
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
- group_by(as_label(sexo)) %>% 
-  tally(fac_viv) %>% #nombre del factor
+ group_by(as_label(sit_conyugal)) %>% 
+  tally(fac_muj) %>% #nombre del factor
    adorn_totals()  # Agrega total
 ```
 
 Podemos usar funciones de tabyl
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
- group_by(as_label(sexo)) %>% 
-  tally(fac_viv) %>% #nombre del factor
+ group_by(as_label(sit_conyugal)) %>% 
+  tally(fac_muj) %>% #nombre del factor
    adorn_totals() %>% # Agrega total
      adorn_percentages("all")  %>% 
       adorn_pct_formatting()
@@ -490,31 +492,31 @@ La función "count()" también permite dar pesos
 
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
-  count(sexo, niv,  wt = fac_viv) 
+  count(sit_conyugal, niv,  wt = fac_muj) 
 
 ```
 
 Es compatible con etiquetas
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
-  count(as_label(sexo), as_label(niv),  wt = fac_viv) 
+  count(as_label(sit_conyugal), as_label(niv),  wt = fac_muj) 
 ```
 
 Podemos mover un poquito con pivot_wider para que se vea más a lo que acostumbramos a una tabla de frecuencias
 
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
-  mutate_at(vars(sexo, niv), as_label) %>% 
-  count(sexo, niv,  wt = fac_viv) %>% 
-  pivot_wider(names_from = sexo, 
+  mutate_at(vars(sit_conyugal, niv), as_label) %>% 
+  count(sit_conyugal, niv,  wt = fac_muj) %>% 
+  pivot_wider(names_from = sit_conyugal, 
               values_from = n)
 ```
 
 ```{r}
 BD_MUJERES_ENDIREH2016_sample %>% 
-  mutate_at(vars(sexo, niv), as_label) %>% # otra forma de mutate y as_label
-  count(sexo, niv,  wt = fac_viv) %>% 
-  pivot_wider(names_from = sexo, 
+  mutate_at(vars(sit_conyugal, niv), as_label) %>% # otra forma de mutate y as_label
+  count(sit_conyugal, niv,  wt = fac_muj) %>% 
+  pivot_wider(names_from = sit_conyugal, 
               values_from = n) %>%
    adorn_totals() %>% # Agrega total
      adorn_percentages("col")  %>% 

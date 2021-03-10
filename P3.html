@@ -940,24 +940,24 @@ div.tocify {
 <pre class="r"><code>library(dplyr) </code></pre>
 <p>Operador de “pipe” o “tubería” %&gt;% (Ctrl+Shift+M) Antes de continuar, presentemos el operador “pipe” %&gt;%. dplyr importa este operador de otro paquete (magrittr). Este operador le permite canalizar la salida de una función a la entrada de otra función. En lugar de funciones de anidamiento (lectura desde adentro hacia afuera), la idea de la tubería es leer las funciones de izquierda a derecha.</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
-    select(sexo, edad) %&gt;% 
+    select(sit_conyugal, edad) %&gt;% 
     head</code></pre>
 <pre><code>## # A tibble: 6 x 2
-##   sexo   edad
-##   &lt;chr&gt; &lt;dbl&gt;
-## 1 2        36
-## 2 2        23
-## 3 2        26
-## 4 2        80
-## 5 2        31
-## 6 2        34</code></pre>
+##   sit_conyugal  edad
+##          &lt;dbl&gt; &lt;dbl&gt;
+## 1            1    36
+## 2            1    23
+## 3            1    26
+## 4            4    80
+## 5            3    31
+## 6            1    34</code></pre>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
-    select(sexo, edad) %&gt;% 
+    select(sit_conyugal, edad) %&gt;% 
     glimpse</code></pre>
 <pre><code>## Rows: 5,563
 ## Columns: 2
-## $ sexo &lt;chr&gt; &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2&quot;, &quot;2...
-## $ edad &lt;dbl&gt; 36, 23, 26, 80, 31, 34, 19, 34, 48, 66, 30, 44, 34, 61, 22, 53...</code></pre>
+## $ sit_conyugal &lt;dbl&gt; 1, 1, 1, 4, 3, 1, 6, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ...
+## $ edad         &lt;dbl&gt; 36, 23, 26, 80, 31, 34, 19, 34, 48, 66, 30, 44, 34, 61...</code></pre>
 </div>
 <div id="revisión-con-skimr" class="section level2">
 <h2>Revisión con skimr</h2>
@@ -25955,36 +25955,54 @@ BD_MUJERES_ENDIREH2016_sample$niv_2&lt;-NULL</code></pre>
 <p>Vamos a pedir cosas más específicas y podemos seleccionar observaciones o filas. Como nuestra base de datos es muy grande, guardaremos el filtro o selección en un objeto.</p>
 <pre class="r"><code>subset1&lt;-BD_MUJERES_ENDIREH2016_sample[BD_MUJERES_ENDIREH2016_sample$niv&gt;4,]</code></pre>
 <p>También podemos seleccionar columnas</p>
-<pre class="r"><code>subset2&lt;- BD_MUJERES_ENDIREH2016_sample[, c(&quot;sexo&quot;, &quot;edad&quot;, &quot;niv&quot;)]</code></pre>
+<pre class="r"><code>subset2&lt;- BD_MUJERES_ENDIREH2016_sample[, c(&quot;sit_conyugal&quot;, &quot;edad&quot;, &quot;niv&quot;)]</code></pre>
 <p>podemos combinar los dos tipos de selección</p>
-<pre class="r"><code>subset3&lt;- BD_MUJERES_ENDIREH2016_sample[(BD_MUJERES_ENDIREH2016_sample$niv&gt;4 &amp; BD_MUJERES_ENDIREH2016_sample$sexo==2 ), c(&quot;sexo&quot;, &quot;edad&quot;, &quot;niv&quot;)]</code></pre>
+<pre class="r"><code>subset3&lt;- BD_MUJERES_ENDIREH2016_sample[(BD_MUJERES_ENDIREH2016_sample$niv&gt;4 &amp; BD_MUJERES_ENDIREH2016_sample$sit_conyugal==2 ), c(&quot;sit_conyugal&quot;, &quot;edad&quot;, &quot;niv&quot;)]</code></pre>
 <p>Con dplyr, podemos usar “filter” y “select”</p>
 <pre class="r"><code>subset4&lt;-BD_MUJERES_ENDIREH2016_sample %&gt;% 
-  filter(niv&gt;4 &amp; sexo==1) %&gt;%
-    select(sexo, edad, niv)</code></pre>
+  filter(niv&gt;4 &amp; sit_conyugal==1) %&gt;%
+    select(sit_conyugal, edad, niv)</code></pre>
 </div>
 <div id="tabulados-con-tabyl" class="section level1">
 <h1>Tabulados con tabyl()</h1>
 <p>Ya hemos utilizado el comando tabyl para hacer tabulados, pero no los hemos “enchulado”</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;%
-  tabyl(sexo)</code></pre>
-<pre><code>##  sexo    n percent
-##     2 5563       1</code></pre>
+  tabyl(sit_conyugal)</code></pre>
+<pre><code>##  sit_conyugal    n    percent
+##             1 3555 0.63904368
+##             2  103 0.01851519
+##             3  591 0.10623764
+##             4  406 0.07298220
+##             5  316 0.05680388
+##             6  347 0.06237642
+##             7  245 0.04404099</code></pre>
 <p>Para ver que esto es una distribución de frecuencias sería muy útil ver la proporción total, ello se realiza agregando un elemento más en nuestro código con una “tubería”:</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;%
-  tabyl(sexo) %&gt;%
+  tabyl(sit_conyugal) %&gt;%
   adorn_totals() #primer enchulamiento</code></pre>
-<pre><code>##   sexo    n percent
-##      2 5563       1
-##  Total 5563       1</code></pre>
+<pre><code>##  sit_conyugal    n    percent
+##             1 3555 0.63904368
+##             2  103 0.01851519
+##             3  591 0.10623764
+##             4  406 0.07298220
+##             5  316 0.05680388
+##             6  347 0.06237642
+##             7  245 0.04404099
+##         Total 5563 1.00000000</code></pre>
 <p>Ahora, las proporciones son raras, y preferimos por los porcentajes.</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;%
-  tabyl(sexo) %&gt;% # para hacer la tabla
+  tabyl(sit_conyugal) %&gt;% # para hacer la tabla
   adorn_totals() %&gt;% # añade totales
   adorn_pct_formatting()  # nos da porcentaje en lugar de proporción</code></pre>
-<pre><code>##   sexo    n percent
-##      2 5563  100.0%
-##  Total 5563  100.0%</code></pre>
+<pre><code>##  sit_conyugal    n percent
+##             1 3555   63.9%
+##             2  103    1.9%
+##             3  591   10.6%
+##             4  406    7.3%
+##             5  316    5.7%
+##             6  347    6.2%
+##             7  245    4.4%
+##         Total 5563  100.0%</code></pre>
 <p>Vamos a darle una “ojeada” a esta variable</p>
 <pre class="r"><code>glimpse(BD_MUJERES_ENDIREH2016_sample$niv)</code></pre>
 <pre><code>##  num [1:5563] 10 3 3 0 10 2 2 4 10 7 ...
@@ -25993,11 +26011,12 @@ BD_MUJERES_ENDIREH2016_sample$niv_2&lt;-NULL</code></pre>
 <h2>Ejemplo de etiquetado</h2>
 <p>Es más fácil crear un objeto de cadena con las etiquetadas ordenadas.</p>
 <p>Una corta:</p>
-<pre class="r"><code>sexo.lab&lt;-c(&quot;Hombre&quot;, &quot;Mujer&quot;)
+<pre class="r"><code>sit_conyugal.lab&lt;-c(&quot;unionlibre&quot;, &quot;separada&quot;, 
+                    &quot;divorciada&quot;, &quot;viuda&quot;,
+                    &quot;casada&quot;, &quot;soltera&quot;)
 
-BD_MUJERES_ENDIREH2016_sample$sexo&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$sexo, labels=sexo.lab) # establece las etiquetas</code></pre>
-<pre><code>## Warning in set_labels_helper(x = .dat, labels = labels, force.labels =
-## force.labels, : `labels` must be a named vector.</code></pre>
+BD_MUJERES_ENDIREH2016_sample$sit_conyugal&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$sit_conyugal, labels=sit_conyugal.lab) # establece las etiquetas</code></pre>
+<pre><code>## More values in &quot;x&quot; than length of &quot;labels&quot;. Additional values were added to labels.</code></pre>
 <p>Una larga:</p>
 <pre class="r"><code>niv.shortlab &lt;- c(&quot;Ninguna&quot;, &quot;Preescolar&quot;, &quot;Primaria&quot;, &quot;Secundaria&quot;, &quot;Prepa&quot;, &quot;Técnico -pri&quot;, &quot;Técnico -sec&quot;, &quot;Normal&quot;, &quot;Normal-lic&quot;, &quot;Licenciatura&quot;, &quot;Posgrado&quot;) #Vector de etiquetas cortas.
 
@@ -26045,140 +26064,155 @@ BD_MUJERES_ENDIREH2016_sample$niv&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$n
 <p>Por ejemplo, si quisiéramos combinar las dos variables que ya estudiamos lo podemos hacer, con una tabla de doble entrada:</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
   mutate(niv=as_label(niv)) %&gt;% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %&gt;% # para que las lea como factor
-                tabyl(niv, sexo, show_missing_levels=F ) %&gt;% # incluimos aquí 
+  mutate(sit_conyugal=as_label(sit_conyugal)) %&gt;% # para que las lea como factor
+                tabyl(niv, sit_conyugal, show_missing_levels=F ) %&gt;% # incluimos aquí 
                 adorn_totals()  </code></pre>
-<pre><code>##           niv    2
-##       Ninguna    7
-##    Preescolar 1436
-##      Primaria 1614
-##    Secundaria  929
-##         Prepa   34
-##  Técnico -pri  131
-##  Técnico -sec  130
-##        Normal   16
-##    Normal-lic   80
-##  Licenciatura  686
-##      Posgrado   70
-##          &lt;NA&gt;  430
-##         Total 5563</code></pre>
+<pre><code>##           niv unionlibre separada divorciada viuda casada soltera   7
+##       Ninguna          4        0          1     1      0       1   0
+##    Preescolar        969       28        155   182     24      42  36
+##      Primaria       1100       44        184    53     67      87  79
+##    Secundaria        532       12         88    13    114      99  71
+##         Prepa         26        0          2     3      2       1   0
+##  Técnico -pri         91        1         16    10      5       5   3
+##  Técnico -sec         74        4         26     3      6      12   5
+##        Normal         12        0          2     1      1       0   0
+##    Normal-lic         39        0         14     2     13       7   5
+##  Licenciatura        420       10         64     7     76      80  29
+##      Posgrado         47        0          6     2      6       7   2
+##          &lt;NA&gt;        241        4         33   129      2       6  15
+##         Total       3555      103        591   406    316     347 245</code></pre>
 <p>Observamos que en cada celda confluyen los casos que comparten las mismas características:</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;%   
-    count(niv==1 &amp; sexo==1) # nos da la segunda celda de la izquierda</code></pre>
-<pre><code>## # A tibble: 1 x 2
-##   `niv == 1 &amp; sexo == 1`     n
-## * &lt;lgl&gt;                  &lt;int&gt;
-## 1 FALSE                   5563</code></pre>
+    count(niv==1 &amp; sit_conyugal==1) # nos da la segunda celda de la izquierda</code></pre>
+<pre><code>## # A tibble: 2 x 2
+##   `niv == 1 &amp; sit_conyugal == 1`     n
+## * &lt;lgl&gt;                          &lt;int&gt;
+## 1 FALSE                           5559
+## 2 TRUE                               4</code></pre>
 </div>
 <div id="totales-y-porcentajes" class="section level3">
 <h3>Totales y porcentajes</h3>
 <p>De esta manera se colocan todos los datos. Si observa al poner la función “adorn_totals()” lo agregó como una nueva fila de totales, pero también podemos pedirle que agregue una columna de totales.</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
   mutate(niv=as_label(niv)) %&gt;% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %&gt;% # para que las lea como factor
-    tabyl(niv, sexo, show_missing_levels=F ) %&gt;% # incluimos aquí sexoo
+  mutate(sit_conyugal=as_label(sit_conyugal)) %&gt;% # para que las lea como factor
+    tabyl(niv, sit_conyugal, show_missing_levels=F ) %&gt;% # incluimos aquí sit_conyugalo
                 adorn_totals(&quot;col&quot;)  </code></pre>
-<pre><code>##           niv    2 Total
-##       Ninguna    7     7
-##    Preescolar 1436  1436
-##      Primaria 1614  1614
-##    Secundaria  929   929
-##         Prepa   34    34
-##  Técnico -pri  131   131
-##  Técnico -sec  130   130
-##        Normal   16    16
-##    Normal-lic   80    80
-##  Licenciatura  686   686
-##      Posgrado   70    70
-##          &lt;NA&gt;  430   430</code></pre>
+<pre><code>##           niv unionlibre separada divorciada viuda casada soltera  7 Total
+##       Ninguna          4        0          1     1      0       1  0     7
+##    Preescolar        969       28        155   182     24      42 36  1436
+##      Primaria       1100       44        184    53     67      87 79  1614
+##    Secundaria        532       12         88    13    114      99 71   929
+##         Prepa         26        0          2     3      2       1  0    34
+##  Técnico -pri         91        1         16    10      5       5  3   131
+##  Técnico -sec         74        4         26     3      6      12  5   130
+##        Normal         12        0          2     1      1       0  0    16
+##    Normal-lic         39        0         14     2     13       7  5    80
+##  Licenciatura        420       10         64     7     76      80 29   686
+##      Posgrado         47        0          6     2      6       7  2    70
+##          &lt;NA&gt;        241        4         33   129      2       6 15   430</code></pre>
 <p>O bien agregar los dos, introduciendo en el argumento “c(”col“,”row“)” un vector de caracteres de las dos opciones requeridas:</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
   mutate(niv=as_label(niv)) %&gt;% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %&gt;% # para que las lea como factor
-                tabyl(niv, sexo, show_missing_levels=F ) %&gt;% # incluimos aquí sexoo
+  mutate(sit_conyugal=as_label(sit_conyugal)) %&gt;% # para que las lea como factor
+                tabyl(niv, sit_conyugal, show_missing_levels=F ) %&gt;% # incluimos aquí sit_conyugalo
                 adorn_totals(c(&quot;col&quot;, &quot;row&quot;)) </code></pre>
-<pre><code>##           niv    2 Total
-##       Ninguna    7     7
-##    Preescolar 1436  1436
-##      Primaria 1614  1614
-##    Secundaria  929   929
-##         Prepa   34    34
-##  Técnico -pri  131   131
-##  Técnico -sec  130   130
-##        Normal   16    16
-##    Normal-lic   80    80
-##  Licenciatura  686   686
-##      Posgrado   70    70
-##          &lt;NA&gt;  430   430
-##         Total 5563  5563</code></pre>
+<pre><code>##           niv unionlibre separada divorciada viuda casada soltera   7 Total
+##       Ninguna          4        0          1     1      0       1   0     7
+##    Preescolar        969       28        155   182     24      42  36  1436
+##      Primaria       1100       44        184    53     67      87  79  1614
+##    Secundaria        532       12         88    13    114      99  71   929
+##         Prepa         26        0          2     3      2       1   0    34
+##  Técnico -pri         91        1         16    10      5       5   3   131
+##  Técnico -sec         74        4         26     3      6      12   5   130
+##        Normal         12        0          2     1      1       0   0    16
+##    Normal-lic         39        0         14     2     13       7   5    80
+##  Licenciatura        420       10         64     7     76      80  29   686
+##      Posgrado         47        0          6     2      6       7   2    70
+##          &lt;NA&gt;        241        4         33   129      2       6  15   430
+##         Total       3555      103        591   406    316     347 245  5563</code></pre>
 <p>Del mismo modo, podemos calcular los porcentajes. Pero los podemos calcular de tres formas. Uno es que lo calculemos para los totales calculados para las filas, para las columnas o para el gran total poblacional.</p>
 <p>Para columnas tenemos el siguiente código y los siguientes resultados:</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
   mutate(niv=as_label(niv)) %&gt;% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %&gt;% # para que las lea como factor
-  tabyl(niv, sexo, show_missing_levels=F ) %&gt;% # incluimos aquí sexo
+  mutate(sit_conyugal=as_label(sit_conyugal)) %&gt;% # para que las lea como factor
+  tabyl(niv, sit_conyugal, show_missing_levels=F ) %&gt;% # incluimos aquí sit_conyugal
                 adorn_totals(c(&quot;col&quot;, &quot;row&quot;)) %&gt;% 
                 adorn_percentages(&quot;col&quot;) %&gt;% # Divide los valores entre el total de la columna
                 adorn_pct_formatting() # lo vuelve porcentaje</code></pre>
-<pre><code>##           niv      2  Total
-##       Ninguna   0.1%   0.1%
-##    Preescolar  25.8%  25.8%
-##      Primaria  29.0%  29.0%
-##    Secundaria  16.7%  16.7%
-##         Prepa   0.6%   0.6%
-##  Técnico -pri   2.4%   2.4%
-##  Técnico -sec   2.3%   2.3%
-##        Normal   0.3%   0.3%
-##    Normal-lic   1.4%   1.4%
-##  Licenciatura  12.3%  12.3%
-##      Posgrado   1.3%   1.3%
-##          &lt;NA&gt;   7.7%   7.7%
-##         Total 100.0% 100.0%</code></pre>
+<pre><code>##           niv unionlibre separada divorciada  viuda casada soltera      7
+##       Ninguna       0.1%     0.0%       0.2%   0.2%   0.0%    0.3%   0.0%
+##    Preescolar      27.3%    27.2%      26.2%  44.8%   7.6%   12.1%  14.7%
+##      Primaria      30.9%    42.7%      31.1%  13.1%  21.2%   25.1%  32.2%
+##    Secundaria      15.0%    11.7%      14.9%   3.2%  36.1%   28.5%  29.0%
+##         Prepa       0.7%     0.0%       0.3%   0.7%   0.6%    0.3%   0.0%
+##  Técnico -pri       2.6%     1.0%       2.7%   2.5%   1.6%    1.4%   1.2%
+##  Técnico -sec       2.1%     3.9%       4.4%   0.7%   1.9%    3.5%   2.0%
+##        Normal       0.3%     0.0%       0.3%   0.2%   0.3%    0.0%   0.0%
+##    Normal-lic       1.1%     0.0%       2.4%   0.5%   4.1%    2.0%   2.0%
+##  Licenciatura      11.8%     9.7%      10.8%   1.7%  24.1%   23.1%  11.8%
+##      Posgrado       1.3%     0.0%       1.0%   0.5%   1.9%    2.0%   0.8%
+##          &lt;NA&gt;       6.8%     3.9%       5.6%  31.8%   0.6%    1.7%   6.1%
+##         Total     100.0%   100.0%     100.0% 100.0% 100.0%  100.0% 100.0%
+##   Total
+##    0.1%
+##   25.8%
+##   29.0%
+##   16.7%
+##    0.6%
+##    2.4%
+##    2.3%
+##    0.3%
+##    1.4%
+##   12.3%
+##    1.3%
+##    7.7%
+##  100.0%</code></pre>
 <p>Cuando se hagan cuadros de distribuciones (que todas sus partes suman 100), los porcentajes pueden ser una gran ayuda para la interpretación, sobre todos cuando se comparar poblaciones de categorías de diferente tamaño. Por lo general, queremos que los cuadros nos den información de donde están los totales y su 100%, de esta manera el lector se puede guiar de porcentaje con respecto a qué está leyendo. En este caso, vemos que el 100% es común en la última fila.</p>
 <p>Veamos la diferencia de cómo podemos leer la misma celda, pero hoy, hemos calculado los porcentajes a nivel de fila:</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
   mutate(niv=as_label(niv)) %&gt;% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %&gt;% # para que las lea como factor
-                tabyl(niv, sexo, show_missing_levels=F ) %&gt;% 
+  mutate(sit_conyugal=as_label(sit_conyugal)) %&gt;% # para que las lea como factor
+                tabyl(niv, sit_conyugal, show_missing_levels=F ) %&gt;% 
                 adorn_totals(c(&quot;col&quot;, &quot;row&quot;)) %&gt;% 
                 adorn_percentages(&quot;row&quot;) %&gt;% # Divide los valores entre el total de la fila
                 adorn_pct_formatting() # lo vuelve porcentaje</code></pre>
-<pre><code>##           niv      2  Total
-##       Ninguna 100.0% 100.0%
-##    Preescolar 100.0% 100.0%
-##      Primaria 100.0% 100.0%
-##    Secundaria 100.0% 100.0%
-##         Prepa 100.0% 100.0%
-##  Técnico -pri 100.0% 100.0%
-##  Técnico -sec 100.0% 100.0%
-##        Normal 100.0% 100.0%
-##    Normal-lic 100.0% 100.0%
-##  Licenciatura 100.0% 100.0%
-##      Posgrado 100.0% 100.0%
-##          &lt;NA&gt; 100.0% 100.0%
-##         Total 100.0% 100.0%</code></pre>
+<pre><code>##           niv unionlibre separada divorciada viuda casada soltera    7  Total
+##       Ninguna      57.1%     0.0%      14.3% 14.3%   0.0%   14.3% 0.0% 100.0%
+##    Preescolar      67.5%     1.9%      10.8% 12.7%   1.7%    2.9% 2.5% 100.0%
+##      Primaria      68.2%     2.7%      11.4%  3.3%   4.2%    5.4% 4.9% 100.0%
+##    Secundaria      57.3%     1.3%       9.5%  1.4%  12.3%   10.7% 7.6% 100.0%
+##         Prepa      76.5%     0.0%       5.9%  8.8%   5.9%    2.9% 0.0% 100.0%
+##  Técnico -pri      69.5%     0.8%      12.2%  7.6%   3.8%    3.8% 2.3% 100.0%
+##  Técnico -sec      56.9%     3.1%      20.0%  2.3%   4.6%    9.2% 3.8% 100.0%
+##        Normal      75.0%     0.0%      12.5%  6.2%   6.2%    0.0% 0.0% 100.0%
+##    Normal-lic      48.8%     0.0%      17.5%  2.5%  16.2%    8.8% 6.2% 100.0%
+##  Licenciatura      61.2%     1.5%       9.3%  1.0%  11.1%   11.7% 4.2% 100.0%
+##      Posgrado      67.1%     0.0%       8.6%  2.9%   8.6%   10.0% 2.9% 100.0%
+##          &lt;NA&gt;      56.0%     0.9%       7.7% 30.0%   0.5%    1.4% 3.5% 100.0%
+##         Total      63.9%     1.9%      10.6%  7.3%   5.7%    6.2% 4.4% 100.0%</code></pre>
 <p>Finalmente, podemos calcular los porcentajes con referencia a la población total en análisis. Es decir la celda en la esquina inferior derecha de nuestra tabla original.</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
   mutate(niv=as_label(niv)) %&gt;% # para que las lea como factor
-  mutate(sexo=as_label(sexo)) %&gt;% # para que las lea como factor
-                tabyl(niv, sexo, show_missing_levels=F ) %&gt;% # incluimos aquí sexoo
+  mutate(sit_conyugal=as_label(sit_conyugal)) %&gt;% # para que las lea como factor
+                tabyl(niv, sit_conyugal, show_missing_levels=F ) %&gt;% # incluimos aquí sit_conyugalo
                 adorn_totals(c(&quot;col&quot;, &quot;row&quot;)) %&gt;% 
                 adorn_percentages(&quot;all&quot;) %&gt;% # Divide los valores entre el total de la población
                 adorn_pct_formatting() # lo vuelve porcentaje</code></pre>
-<pre><code>##           niv      2  Total
-##       Ninguna   0.1%   0.1%
-##    Preescolar  25.8%  25.8%
-##      Primaria  29.0%  29.0%
-##    Secundaria  16.7%  16.7%
-##         Prepa   0.6%   0.6%
-##  Técnico -pri   2.4%   2.4%
-##  Técnico -sec   2.3%   2.3%
-##        Normal   0.3%   0.3%
-##    Normal-lic   1.4%   1.4%
-##  Licenciatura  12.3%  12.3%
-##      Posgrado   1.3%   1.3%
-##          &lt;NA&gt;   7.7%   7.7%
-##         Total 100.0% 100.0%</code></pre>
+<pre><code>##           niv unionlibre separada divorciada viuda casada soltera    7  Total
+##       Ninguna       0.1%     0.0%       0.0%  0.0%   0.0%    0.0% 0.0%   0.1%
+##    Preescolar      17.4%     0.5%       2.8%  3.3%   0.4%    0.8% 0.6%  25.8%
+##      Primaria      19.8%     0.8%       3.3%  1.0%   1.2%    1.6% 1.4%  29.0%
+##    Secundaria       9.6%     0.2%       1.6%  0.2%   2.0%    1.8% 1.3%  16.7%
+##         Prepa       0.5%     0.0%       0.0%  0.1%   0.0%    0.0% 0.0%   0.6%
+##  Técnico -pri       1.6%     0.0%       0.3%  0.2%   0.1%    0.1% 0.1%   2.4%
+##  Técnico -sec       1.3%     0.1%       0.5%  0.1%   0.1%    0.2% 0.1%   2.3%
+##        Normal       0.2%     0.0%       0.0%  0.0%   0.0%    0.0% 0.0%   0.3%
+##    Normal-lic       0.7%     0.0%       0.3%  0.0%   0.2%    0.1% 0.1%   1.4%
+##  Licenciatura       7.5%     0.2%       1.2%  0.1%   1.4%    1.4% 0.5%  12.3%
+##      Posgrado       0.8%     0.0%       0.1%  0.0%   0.1%    0.1% 0.0%   1.3%
+##          &lt;NA&gt;       4.3%     0.1%       0.6%  2.3%   0.0%    0.1% 0.3%   7.7%
+##         Total      63.9%     1.9%      10.6%  7.3%   5.7%    6.2% 4.4% 100.0%</code></pre>
 </div>
 </div>
 </div>
@@ -26206,104 +26240,114 @@ BD_MUJERES_ENDIREH2016_sample$niv&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$n
 <h2>La función tally</h2>
 <p>El comando “tabyl()” del paquete “janitor” es muy útil pero no es compatible con los factores del expansión. En realidad, tabyl() nos ahorra un poco el hecho de tener que agrupar nuestra base en categorías y luego hacer un conteo para cada una de ellas. “tally()” es un comando que nos hace ese conteo y “group_by” nos agrupa las observaciones de nuestra base de datos para hacer cualquier operación.</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
- group_by(as_label(sexo)) %&gt;% 
-  tally(fac_viv) %&gt;% #nombre del factor
+ group_by(as_label(sit_conyugal)) %&gt;% 
+  tally(fac_muj) %&gt;% #nombre del factor
    adorn_totals()  # Agrega total</code></pre>
-<pre><code>##  as_label(sexo)       n
-##               2 1507433
-##           Total 1507433</code></pre>
+<pre><code>##  as_label(sit_conyugal)       n
+##              unionlibre 1301287
+##                separada   44343
+##              divorciada  260453
+##                   viuda  162076
+##                  casada  182451
+##                 soltera  209641
+##                       7  147613
+##                   Total 2307864</code></pre>
 <p>Podemos usar funciones de tabyl</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
- group_by(as_label(sexo)) %&gt;% 
-  tally(fac_viv) %&gt;% #nombre del factor
+ group_by(as_label(sit_conyugal)) %&gt;% 
+  tally(fac_muj) %&gt;% #nombre del factor
    adorn_totals() %&gt;% # Agrega total
      adorn_percentages(&quot;all&quot;)  %&gt;% 
       adorn_pct_formatting()</code></pre>
-<pre><code>##  as_label(sexo)      n
-##               2 100.0%
-##           Total 100.0%</code></pre>
+<pre><code>##  as_label(sit_conyugal)      n
+##              unionlibre  56.4%
+##                separada   1.9%
+##              divorciada  11.3%
+##                   viuda   7.0%
+##                  casada   7.9%
+##                 soltera   9.1%
+##                       7   6.4%
+##                   Total 100.0%</code></pre>
 </div>
 <div id="otras-formas" class="section level2">
 <h2>Otras formas</h2>
 <p>La función “count()” también permite dar pesos</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
-  count(sexo, niv,  wt = fac_viv) </code></pre>
-<pre><code>## # A tibble: 12 x 3
-##    sexo    niv      n
-##    &lt;chr&gt; &lt;dbl&gt;  &lt;dbl&gt;
-##  1 2         0 113891
-##  2 2         1   1527
-##  3 2         2 389939
-##  4 2         3 426619
-##  5 2         4 244946
-##  6 2         5  11740
-##  7 2         6  47540
-##  8 2         7  36998
-##  9 2         8   2318
-## 10 2         9  22692
-## 11 2        10 185785
-## 12 2        11  23438</code></pre>
+  count(sit_conyugal, niv,  wt = fac_muj) </code></pre>
+<pre><code>## # A tibble: 74 x 3
+##    sit_conyugal   niv      n
+##           &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+##  1            1     0  92621
+##  2            1     1   1268
+##  3            1     2 360831
+##  4            1     3 403392
+##  5            1     4 187513
+##  6            1     5  10704
+##  7            1     6  42610
+##  8            1     7  29052
+##  9            1     8   2896
+## 10            1     9  15878
+## # ... with 64 more rows</code></pre>
 <p>Es compatible con etiquetas</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
-  count(as_label(sexo), as_label(niv),  wt = fac_viv) </code></pre>
-<pre><code>## # A tibble: 12 x 3
-##    `as_label(sexo)` `as_label(niv)`      n
-##    &lt;chr&gt;            &lt;fct&gt;            &lt;dbl&gt;
-##  1 2                Ninguna           1527
-##  2 2                Preescolar      389939
-##  3 2                Primaria        426619
-##  4 2                Secundaria      244946
-##  5 2                Prepa            11740
-##  6 2                Técnico -pri     47540
-##  7 2                Técnico -sec     36998
-##  8 2                Normal            2318
-##  9 2                Normal-lic       22692
-## 10 2                Licenciatura    185785
-## 11 2                Posgrado         23438
-## 12 2                &lt;NA&gt;            113891</code></pre>
+  count(as_label(sit_conyugal), as_label(niv),  wt = fac_muj) </code></pre>
+<pre><code>## # A tibble: 74 x 3
+##    `as_label(sit_conyugal)` `as_label(niv)`      n
+##    &lt;fct&gt;                    &lt;fct&gt;            &lt;dbl&gt;
+##  1 unionlibre               Ninguna           1268
+##  2 unionlibre               Preescolar      360831
+##  3 unionlibre               Primaria        403392
+##  4 unionlibre               Secundaria      187513
+##  5 unionlibre               Prepa            10704
+##  6 unionlibre               Técnico -pri     42610
+##  7 unionlibre               Técnico -sec     29052
+##  8 unionlibre               Normal            2896
+##  9 unionlibre               Normal-lic       15878
+## 10 unionlibre               Licenciatura    137698
+## # ... with 64 more rows</code></pre>
 <p>Podemos mover un poquito con pivot_wider para que se vea más a lo que acostumbramos a una tabla de frecuencias</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
-  mutate_at(vars(sexo, niv), as_label) %&gt;% 
-  count(sexo, niv,  wt = fac_viv) %&gt;% 
-  pivot_wider(names_from = sexo, 
+  mutate_at(vars(sit_conyugal, niv), as_label) %&gt;% 
+  count(sit_conyugal, niv,  wt = fac_muj) %&gt;% 
+  pivot_wider(names_from = sit_conyugal, 
               values_from = n)</code></pre>
-<pre><code>## # A tibble: 12 x 2
-##    niv             `2`
-##    &lt;fct&gt;         &lt;dbl&gt;
-##  1 Ninguna        1527
-##  2 Preescolar   389939
-##  3 Primaria     426619
-##  4 Secundaria   244946
-##  5 Prepa         11740
-##  6 Técnico -pri  47540
-##  7 Técnico -sec  36998
-##  8 Normal         2318
-##  9 Normal-lic    22692
-## 10 Licenciatura 185785
-## 11 Posgrado      23438
-## 12 &lt;NA&gt;         113891</code></pre>
+<pre><code>## # A tibble: 12 x 8
+##    niv          unionlibre separada divorciada viuda casada soltera   `7`
+##    &lt;fct&gt;             &lt;dbl&gt;    &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+##  1 Ninguna            1268       NA        184    80     NA     302    NA
+##  2 Preescolar       360831     9181      65815 72976  12064   25124 22646
+##  3 Primaria         403392    19782      80221 21925  40846   53393 51077
+##  4 Secundaria       187513     4464      44733  2544  69190   57449 41484
+##  5 Prepa             10704       NA        436  2086   2828     187    NA
+##  6 Técnico -pri      42610     1031       7942  6500   2432    1996  2682
+##  7 Técnico -sec      29052     2749       9511  1044   2550    8529  3326
+##  8 Normal             2896       NA        362   109    105      NA    NA
+##  9 Normal-lic        15878       NA       4723  1755   7676    2928  2231
+## 10 Licenciatura     137698     5089      30506  2988  41739   53341 13801
+## 11 Posgrado          16824       NA       3760  1129   2435    2534  1817
+## 12 &lt;NA&gt;              92621     2047      12260 48940    586    3858  8549</code></pre>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
-  mutate_at(vars(sexo, niv), as_label) %&gt;% # otra forma de mutate y as_label
-  count(sexo, niv,  wt = fac_viv) %&gt;% 
-  pivot_wider(names_from = sexo, 
+  mutate_at(vars(sit_conyugal, niv), as_label) %&gt;% # otra forma de mutate y as_label
+  count(sit_conyugal, niv,  wt = fac_muj) %&gt;% 
+  pivot_wider(names_from = sit_conyugal, 
               values_from = n) %&gt;%
    adorn_totals() %&gt;% # Agrega total
      adorn_percentages(&quot;col&quot;)  %&gt;% 
       adorn_pct_formatting()</code></pre>
-<pre><code>##           niv      2
-##       Ninguna   0.1%
-##    Preescolar  25.9%
-##      Primaria  28.3%
-##    Secundaria  16.2%
-##         Prepa   0.8%
-##  Técnico -pri   3.2%
-##  Técnico -sec   2.5%
-##        Normal   0.2%
-##    Normal-lic   1.5%
-##  Licenciatura  12.3%
-##      Posgrado   1.6%
-##          &lt;NA&gt;   7.6%
-##         Total 100.0%</code></pre>
+<pre><code>##           niv unionlibre separada divorciada  viuda casada soltera      7
+##       Ninguna       0.1%        -       0.1%   0.0%      -    0.1%      -
+##    Preescolar      27.7%    20.7%      25.3%  45.0%   6.6%   12.0%  15.3%
+##      Primaria      31.0%    44.6%      30.8%  13.5%  22.4%   25.5%  34.6%
+##    Secundaria      14.4%    10.1%      17.2%   1.6%  37.9%   27.4%  28.1%
+##         Prepa       0.8%        -       0.2%   1.3%   1.6%    0.1%      -
+##  Técnico -pri       3.3%     2.3%       3.0%   4.0%   1.3%    1.0%   1.8%
+##  Técnico -sec       2.2%     6.2%       3.7%   0.6%   1.4%    4.1%   2.3%
+##        Normal       0.2%        -       0.1%   0.1%   0.1%       -      -
+##    Normal-lic       1.2%        -       1.8%   1.1%   4.2%    1.4%   1.5%
+##  Licenciatura      10.6%    11.5%      11.7%   1.8%  22.9%   25.4%   9.3%
+##      Posgrado       1.3%        -       1.4%   0.7%   1.3%    1.2%   1.2%
+##          &lt;NA&gt;       7.1%     4.6%       4.7%  30.2%   0.3%    1.8%   5.8%
+##         Total     100.0%   100.0%     100.0% 100.0% 100.0%  100.0% 100.0%</code></pre>
 </div>
 </div>
 
