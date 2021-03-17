@@ -26011,10 +26011,9 @@ BD_MUJERES_ENDIREH2016_sample$niv_2&lt;-NULL</code></pre>
 <h2>Ejemplo de etiquetado</h2>
 <p>Es más fácil crear un objeto de cadena con las etiquetadas ordenadas.</p>
 <p>Una corta:</p>
-<pre class="r"><code>sit_conyugal.lab&lt;-c(&quot;casada-unida&quot;,  &quot;Unida+pareja ausente&quot;, &quot;Separada o Divorciada&quot;, &quot;Soltera + novio&quot;, &quot;“ con ex&quot;, &quot;soltera nunca novio&quot;)
+<pre class="r"><code>sit_conyugal.lab&lt;-c(&quot;casada-unida&quot;,  &quot;Unida+pareja ausente&quot;, &quot;Separada o Divorciada&quot;, &quot;viuda&quot;, &quot;Soltera + novio&quot;, &quot;“ con ex&quot;, &quot;soltera nunca novio&quot;)
 
 BD_MUJERES_ENDIREH2016_sample$sit_conyugal&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$sit_conyugal, labels=sit_conyugal.lab) # establece las etiquetas</code></pre>
-<pre><code>## More values in &quot;x&quot; than length of &quot;labels&quot;. Additional values were added to labels.</code></pre>
 <p>Una larga:</p>
 <pre class="r"><code>niv.shortlab &lt;- c(&quot;Ninguna&quot;, &quot;Preescolar&quot;, &quot;Primaria&quot;, &quot;Secundaria&quot;, &quot;Prepa&quot;, &quot;Técnico -pri&quot;,
                   &quot;Técnico -sec&quot;, &quot;Técnico -prepa&quot;, &quot;Normal&quot;, &quot;Normal-lic&quot;, &quot;Licenciatura&quot;, &quot;Posgrado&quot;,&quot;No definido&quot;) #Vector de etiquetas cortas.
@@ -26065,34 +26064,34 @@ BD_MUJERES_ENDIREH2016_sample$niv&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$n
   mutate(sit_conyugal=as_label(sit_conyugal)) %&gt;% # para que las lea como factor
                 tabyl(niv, sit_conyugal, show_missing_levels=F ) %&gt;% # incluimos aquí 
                 adorn_totals()  </code></pre>
-<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada
-##         Ninguna          241                    4                    33
-##      Preescolar            4                    0                     1
-##        Primaria          969                   28                   155
-##      Secundaria         1100                   44                   184
-##           Prepa          532                   12                    88
-##    Técnico -pri           26                    0                     2
-##    Técnico -sec           91                    1                    16
-##  Técnico -prepa           74                    4                    26
-##          Normal           12                    0                     2
-##      Normal-lic           39                    0                    14
-##    Licenciatura          420                   10                    64
-##        Posgrado           47                    0                     6
-##           Total         3555                  103                   591
-##  Soltera + novio “ con ex soltera nunca novio   7
-##              129        2                   6  15
-##                1        0                   1   0
-##              182       24                  42  36
-##               53       67                  87  79
-##               13      114                  99  71
-##                3        2                   1   0
-##               10        5                   5   3
-##                3        6                  12   5
-##                1        1                   0   0
-##                2       13                   7   5
-##                7       76                  80  29
-##                2        6                   7   2
-##              406      316                 347 245</code></pre>
+<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada viuda
+##         Ninguna          241                    4                    33   129
+##      Preescolar            4                    0                     1     1
+##        Primaria          969                   28                   155   182
+##      Secundaria         1100                   44                   184    53
+##           Prepa          532                   12                    88    13
+##    Técnico -pri           26                    0                     2     3
+##    Técnico -sec           91                    1                    16    10
+##  Técnico -prepa           74                    4                    26     3
+##          Normal           12                    0                     2     1
+##      Normal-lic           39                    0                    14     2
+##    Licenciatura          420                   10                    64     7
+##        Posgrado           47                    0                     6     2
+##           Total         3555                  103                   591   406
+##  Soltera + novio “ con ex soltera nunca novio
+##                2        6                  15
+##                0        1                   0
+##               24       42                  36
+##               67       87                  79
+##              114       99                  71
+##                2        1                   0
+##                5        5                   3
+##                6       12                   5
+##                1        0                   0
+##               13        7                   5
+##               76       80                  29
+##                6        7                   2
+##              316      347                 245</code></pre>
 <p>Observamos que en cada celda confluyen los casos que comparten las mismas características:</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;%   
     count(niv==1 &amp; sit_conyugal==1) # nos da la segunda celda de la izquierda</code></pre>
@@ -26110,66 +26109,66 @@ BD_MUJERES_ENDIREH2016_sample$niv&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$n
   mutate(sit_conyugal=as_label(sit_conyugal)) %&gt;% # para que las lea como factor
     tabyl(niv, sit_conyugal, show_missing_levels=F ) %&gt;% # incluimos aquí sit_conyugalo
                 adorn_totals(&quot;col&quot;)  </code></pre>
-<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada
-##         Ninguna          241                    4                    33
-##      Preescolar            4                    0                     1
-##        Primaria          969                   28                   155
-##      Secundaria         1100                   44                   184
-##           Prepa          532                   12                    88
-##    Técnico -pri           26                    0                     2
-##    Técnico -sec           91                    1                    16
-##  Técnico -prepa           74                    4                    26
-##          Normal           12                    0                     2
-##      Normal-lic           39                    0                    14
-##    Licenciatura          420                   10                    64
-##        Posgrado           47                    0                     6
-##  Soltera + novio “ con ex soltera nunca novio  7 Total
-##              129        2                   6 15   430
-##                1        0                   1  0     7
-##              182       24                  42 36  1436
-##               53       67                  87 79  1614
-##               13      114                  99 71   929
-##                3        2                   1  0    34
-##               10        5                   5  3   131
-##                3        6                  12  5   130
-##                1        1                   0  0    16
-##                2       13                   7  5    80
-##                7       76                  80 29   686
-##                2        6                   7  2    70</code></pre>
+<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada viuda
+##         Ninguna          241                    4                    33   129
+##      Preescolar            4                    0                     1     1
+##        Primaria          969                   28                   155   182
+##      Secundaria         1100                   44                   184    53
+##           Prepa          532                   12                    88    13
+##    Técnico -pri           26                    0                     2     3
+##    Técnico -sec           91                    1                    16    10
+##  Técnico -prepa           74                    4                    26     3
+##          Normal           12                    0                     2     1
+##      Normal-lic           39                    0                    14     2
+##    Licenciatura          420                   10                    64     7
+##        Posgrado           47                    0                     6     2
+##  Soltera + novio “ con ex soltera nunca novio Total
+##                2        6                  15   430
+##                0        1                   0     7
+##               24       42                  36  1436
+##               67       87                  79  1614
+##              114       99                  71   929
+##                2        1                   0    34
+##                5        5                   3   131
+##                6       12                   5   130
+##                1        0                   0    16
+##               13        7                   5    80
+##               76       80                  29   686
+##                6        7                   2    70</code></pre>
 <p>O bien agregar los dos, introduciendo en el argumento “c(”col“,”row“)” un vector de caracteres de las dos opciones requeridas:</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
   mutate(niv=as_label(niv)) %&gt;% # para que las lea como factor
   mutate(sit_conyugal=as_label(sit_conyugal)) %&gt;% # para que las lea como factor
                 tabyl(niv, sit_conyugal, show_missing_levels=F ) %&gt;% # incluimos aquí sit_conyugalo
                 adorn_totals(c(&quot;col&quot;, &quot;row&quot;)) </code></pre>
-<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada
-##         Ninguna          241                    4                    33
-##      Preescolar            4                    0                     1
-##        Primaria          969                   28                   155
-##      Secundaria         1100                   44                   184
-##           Prepa          532                   12                    88
-##    Técnico -pri           26                    0                     2
-##    Técnico -sec           91                    1                    16
-##  Técnico -prepa           74                    4                    26
-##          Normal           12                    0                     2
-##      Normal-lic           39                    0                    14
-##    Licenciatura          420                   10                    64
-##        Posgrado           47                    0                     6
-##           Total         3555                  103                   591
-##  Soltera + novio “ con ex soltera nunca novio   7 Total
-##              129        2                   6  15   430
-##                1        0                   1   0     7
-##              182       24                  42  36  1436
-##               53       67                  87  79  1614
-##               13      114                  99  71   929
-##                3        2                   1   0    34
-##               10        5                   5   3   131
-##                3        6                  12   5   130
-##                1        1                   0   0    16
-##                2       13                   7   5    80
-##                7       76                  80  29   686
-##                2        6                   7   2    70
-##              406      316                 347 245  5563</code></pre>
+<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada viuda
+##         Ninguna          241                    4                    33   129
+##      Preescolar            4                    0                     1     1
+##        Primaria          969                   28                   155   182
+##      Secundaria         1100                   44                   184    53
+##           Prepa          532                   12                    88    13
+##    Técnico -pri           26                    0                     2     3
+##    Técnico -sec           91                    1                    16    10
+##  Técnico -prepa           74                    4                    26     3
+##          Normal           12                    0                     2     1
+##      Normal-lic           39                    0                    14     2
+##    Licenciatura          420                   10                    64     7
+##        Posgrado           47                    0                     6     2
+##           Total         3555                  103                   591   406
+##  Soltera + novio “ con ex soltera nunca novio Total
+##                2        6                  15   430
+##                0        1                   0     7
+##               24       42                  36  1436
+##               67       87                  79  1614
+##              114       99                  71   929
+##                2        1                   0    34
+##                5        5                   3   131
+##                6       12                   5   130
+##                1        0                   0    16
+##               13        7                   5    80
+##               76       80                  29   686
+##                6        7                   2    70
+##              316      347                 245  5563</code></pre>
 <p>Del mismo modo, podemos calcular los porcentajes. Pero los podemos calcular de tres formas. Uno es que lo calculemos para los totales calculados para las filas, para las columnas o para el gran total poblacional.</p>
 <p>Para columnas tenemos el siguiente código y los siguientes resultados:</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
@@ -26179,34 +26178,34 @@ BD_MUJERES_ENDIREH2016_sample$niv&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$n
                 adorn_totals(c(&quot;col&quot;, &quot;row&quot;)) %&gt;% 
                 adorn_percentages(&quot;col&quot;) %&gt;% # Divide los valores entre el total de la columna
                 adorn_pct_formatting() # lo vuelve porcentaje</code></pre>
-<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada
-##         Ninguna         6.8%                 3.9%                  5.6%
-##      Preescolar         0.1%                 0.0%                  0.2%
-##        Primaria        27.3%                27.2%                 26.2%
-##      Secundaria        30.9%                42.7%                 31.1%
-##           Prepa        15.0%                11.7%                 14.9%
-##    Técnico -pri         0.7%                 0.0%                  0.3%
-##    Técnico -sec         2.6%                 1.0%                  2.7%
-##  Técnico -prepa         2.1%                 3.9%                  4.4%
-##          Normal         0.3%                 0.0%                  0.3%
-##      Normal-lic         1.1%                 0.0%                  2.4%
-##    Licenciatura        11.8%                 9.7%                 10.8%
-##        Posgrado         1.3%                 0.0%                  1.0%
-##           Total       100.0%               100.0%                100.0%
-##  Soltera + novio “ con ex soltera nunca novio      7  Total
-##            31.8%     0.6%                1.7%   6.1%   7.7%
-##             0.2%     0.0%                0.3%   0.0%   0.1%
-##            44.8%     7.6%               12.1%  14.7%  25.8%
-##            13.1%    21.2%               25.1%  32.2%  29.0%
-##             3.2%    36.1%               28.5%  29.0%  16.7%
-##             0.7%     0.6%                0.3%   0.0%   0.6%
-##             2.5%     1.6%                1.4%   1.2%   2.4%
-##             0.7%     1.9%                3.5%   2.0%   2.3%
-##             0.2%     0.3%                0.0%   0.0%   0.3%
-##             0.5%     4.1%                2.0%   2.0%   1.4%
-##             1.7%    24.1%               23.1%  11.8%  12.3%
-##             0.5%     1.9%                2.0%   0.8%   1.3%
-##           100.0%   100.0%              100.0% 100.0% 100.0%</code></pre>
+<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada  viuda
+##         Ninguna         6.8%                 3.9%                  5.6%  31.8%
+##      Preescolar         0.1%                 0.0%                  0.2%   0.2%
+##        Primaria        27.3%                27.2%                 26.2%  44.8%
+##      Secundaria        30.9%                42.7%                 31.1%  13.1%
+##           Prepa        15.0%                11.7%                 14.9%   3.2%
+##    Técnico -pri         0.7%                 0.0%                  0.3%   0.7%
+##    Técnico -sec         2.6%                 1.0%                  2.7%   2.5%
+##  Técnico -prepa         2.1%                 3.9%                  4.4%   0.7%
+##          Normal         0.3%                 0.0%                  0.3%   0.2%
+##      Normal-lic         1.1%                 0.0%                  2.4%   0.5%
+##    Licenciatura        11.8%                 9.7%                 10.8%   1.7%
+##        Posgrado         1.3%                 0.0%                  1.0%   0.5%
+##           Total       100.0%               100.0%                100.0% 100.0%
+##  Soltera + novio “ con ex soltera nunca novio  Total
+##             0.6%     1.7%                6.1%   7.7%
+##             0.0%     0.3%                0.0%   0.1%
+##             7.6%    12.1%               14.7%  25.8%
+##            21.2%    25.1%               32.2%  29.0%
+##            36.1%    28.5%               29.0%  16.7%
+##             0.6%     0.3%                0.0%   0.6%
+##             1.6%     1.4%                1.2%   2.4%
+##             1.9%     3.5%                2.0%   2.3%
+##             0.3%     0.0%                0.0%   0.3%
+##             4.1%     2.0%                2.0%   1.4%
+##            24.1%    23.1%               11.8%  12.3%
+##             1.9%     2.0%                0.8%   1.3%
+##           100.0%   100.0%              100.0% 100.0%</code></pre>
 <p>Cuando se hagan cuadros de distribuciones (que todas sus partes suman 100), los porcentajes pueden ser una gran ayuda para la interpretación, sobre todos cuando se comparar poblaciones de categorías de diferente tamaño. Por lo general, queremos que los cuadros nos den información de donde están los totales y su 100%, de esta manera el lector se puede guiar de porcentaje con respecto a qué está leyendo. En este caso, vemos que el 100% es común en la última fila.</p>
 <p>Veamos la diferencia de cómo podemos leer la misma celda, pero hoy, hemos calculado los porcentajes a nivel de fila:</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
@@ -26216,34 +26215,34 @@ BD_MUJERES_ENDIREH2016_sample$niv&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$n
                 adorn_totals(c(&quot;col&quot;, &quot;row&quot;)) %&gt;% 
                 adorn_percentages(&quot;row&quot;) %&gt;% # Divide los valores entre el total de la fila
                 adorn_pct_formatting() # lo vuelve porcentaje</code></pre>
-<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada
-##         Ninguna        56.0%                 0.9%                  7.7%
-##      Preescolar        57.1%                 0.0%                 14.3%
-##        Primaria        67.5%                 1.9%                 10.8%
-##      Secundaria        68.2%                 2.7%                 11.4%
-##           Prepa        57.3%                 1.3%                  9.5%
-##    Técnico -pri        76.5%                 0.0%                  5.9%
-##    Técnico -sec        69.5%                 0.8%                 12.2%
-##  Técnico -prepa        56.9%                 3.1%                 20.0%
-##          Normal        75.0%                 0.0%                 12.5%
-##      Normal-lic        48.8%                 0.0%                 17.5%
-##    Licenciatura        61.2%                 1.5%                  9.3%
-##        Posgrado        67.1%                 0.0%                  8.6%
-##           Total        63.9%                 1.9%                 10.6%
-##  Soltera + novio “ con ex soltera nunca novio    7  Total
-##            30.0%     0.5%                1.4% 3.5% 100.0%
-##            14.3%     0.0%               14.3% 0.0% 100.0%
-##            12.7%     1.7%                2.9% 2.5% 100.0%
-##             3.3%     4.2%                5.4% 4.9% 100.0%
-##             1.4%    12.3%               10.7% 7.6% 100.0%
-##             8.8%     5.9%                2.9% 0.0% 100.0%
-##             7.6%     3.8%                3.8% 2.3% 100.0%
-##             2.3%     4.6%                9.2% 3.8% 100.0%
-##             6.2%     6.2%                0.0% 0.0% 100.0%
-##             2.5%    16.2%                8.8% 6.2% 100.0%
-##             1.0%    11.1%               11.7% 4.2% 100.0%
-##             2.9%     8.6%               10.0% 2.9% 100.0%
-##             7.3%     5.7%                6.2% 4.4% 100.0%</code></pre>
+<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada viuda
+##         Ninguna        56.0%                 0.9%                  7.7% 30.0%
+##      Preescolar        57.1%                 0.0%                 14.3% 14.3%
+##        Primaria        67.5%                 1.9%                 10.8% 12.7%
+##      Secundaria        68.2%                 2.7%                 11.4%  3.3%
+##           Prepa        57.3%                 1.3%                  9.5%  1.4%
+##    Técnico -pri        76.5%                 0.0%                  5.9%  8.8%
+##    Técnico -sec        69.5%                 0.8%                 12.2%  7.6%
+##  Técnico -prepa        56.9%                 3.1%                 20.0%  2.3%
+##          Normal        75.0%                 0.0%                 12.5%  6.2%
+##      Normal-lic        48.8%                 0.0%                 17.5%  2.5%
+##    Licenciatura        61.2%                 1.5%                  9.3%  1.0%
+##        Posgrado        67.1%                 0.0%                  8.6%  2.9%
+##           Total        63.9%                 1.9%                 10.6%  7.3%
+##  Soltera + novio “ con ex soltera nunca novio  Total
+##             0.5%     1.4%                3.5% 100.0%
+##             0.0%    14.3%                0.0% 100.0%
+##             1.7%     2.9%                2.5% 100.0%
+##             4.2%     5.4%                4.9% 100.0%
+##            12.3%    10.7%                7.6% 100.0%
+##             5.9%     2.9%                0.0% 100.0%
+##             3.8%     3.8%                2.3% 100.0%
+##             4.6%     9.2%                3.8% 100.0%
+##             6.2%     0.0%                0.0% 100.0%
+##            16.2%     8.8%                6.2% 100.0%
+##            11.1%    11.7%                4.2% 100.0%
+##             8.6%    10.0%                2.9% 100.0%
+##             5.7%     6.2%                4.4% 100.0%</code></pre>
 <p>Finalmente, podemos calcular los porcentajes con referencia a la población total en análisis. Es decir la celda en la esquina inferior derecha de nuestra tabla original.</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
   mutate(niv=as_label(niv)) %&gt;% # para que las lea como factor
@@ -26252,34 +26251,34 @@ BD_MUJERES_ENDIREH2016_sample$niv&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$n
                 adorn_totals(c(&quot;col&quot;, &quot;row&quot;)) %&gt;% 
                 adorn_percentages(&quot;all&quot;) %&gt;% # Divide los valores entre el total de la población
                 adorn_pct_formatting() # lo vuelve porcentaje</code></pre>
-<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada
-##         Ninguna         4.3%                 0.1%                  0.6%
-##      Preescolar         0.1%                 0.0%                  0.0%
-##        Primaria        17.4%                 0.5%                  2.8%
-##      Secundaria        19.8%                 0.8%                  3.3%
-##           Prepa         9.6%                 0.2%                  1.6%
-##    Técnico -pri         0.5%                 0.0%                  0.0%
-##    Técnico -sec         1.6%                 0.0%                  0.3%
-##  Técnico -prepa         1.3%                 0.1%                  0.5%
-##          Normal         0.2%                 0.0%                  0.0%
-##      Normal-lic         0.7%                 0.0%                  0.3%
-##    Licenciatura         7.5%                 0.2%                  1.2%
-##        Posgrado         0.8%                 0.0%                  0.1%
-##           Total        63.9%                 1.9%                 10.6%
-##  Soltera + novio “ con ex soltera nunca novio    7  Total
-##             2.3%     0.0%                0.1% 0.3%   7.7%
-##             0.0%     0.0%                0.0% 0.0%   0.1%
-##             3.3%     0.4%                0.8% 0.6%  25.8%
-##             1.0%     1.2%                1.6% 1.4%  29.0%
-##             0.2%     2.0%                1.8% 1.3%  16.7%
-##             0.1%     0.0%                0.0% 0.0%   0.6%
-##             0.2%     0.1%                0.1% 0.1%   2.4%
-##             0.1%     0.1%                0.2% 0.1%   2.3%
-##             0.0%     0.0%                0.0% 0.0%   0.3%
-##             0.0%     0.2%                0.1% 0.1%   1.4%
-##             0.1%     1.4%                1.4% 0.5%  12.3%
-##             0.0%     0.1%                0.1% 0.0%   1.3%
-##             7.3%     5.7%                6.2% 4.4% 100.0%</code></pre>
+<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada viuda
+##         Ninguna         4.3%                 0.1%                  0.6%  2.3%
+##      Preescolar         0.1%                 0.0%                  0.0%  0.0%
+##        Primaria        17.4%                 0.5%                  2.8%  3.3%
+##      Secundaria        19.8%                 0.8%                  3.3%  1.0%
+##           Prepa         9.6%                 0.2%                  1.6%  0.2%
+##    Técnico -pri         0.5%                 0.0%                  0.0%  0.1%
+##    Técnico -sec         1.6%                 0.0%                  0.3%  0.2%
+##  Técnico -prepa         1.3%                 0.1%                  0.5%  0.1%
+##          Normal         0.2%                 0.0%                  0.0%  0.0%
+##      Normal-lic         0.7%                 0.0%                  0.3%  0.0%
+##    Licenciatura         7.5%                 0.2%                  1.2%  0.1%
+##        Posgrado         0.8%                 0.0%                  0.1%  0.0%
+##           Total        63.9%                 1.9%                 10.6%  7.3%
+##  Soltera + novio “ con ex soltera nunca novio  Total
+##             0.0%     0.1%                0.3%   7.7%
+##             0.0%     0.0%                0.0%   0.1%
+##             0.4%     0.8%                0.6%  25.8%
+##             1.2%     1.6%                1.4%  29.0%
+##             2.0%     1.8%                1.3%  16.7%
+##             0.0%     0.0%                0.0%   0.6%
+##             0.1%     0.1%                0.1%   2.4%
+##             0.1%     0.2%                0.1%   2.3%
+##             0.0%     0.0%                0.0%   0.3%
+##             0.2%     0.1%                0.1%   1.4%
+##             1.4%     1.4%                0.5%  12.3%
+##             0.1%     0.1%                0.0%   1.3%
+##             5.7%     6.2%                4.4% 100.0%</code></pre>
 </div>
 </div>
 </div>
@@ -26314,10 +26313,10 @@ BD_MUJERES_ENDIREH2016_sample$niv&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$n
 ##            casada-unida 1301287
 ##    Unida+pareja ausente   44343
 ##   Separada o Divorciada  260453
-##         Soltera + novio  162076
-##                “ con ex  182451
-##     soltera nunca novio  209641
-##                       7  147613
+##                   viuda  162076
+##         Soltera + novio  182451
+##                “ con ex  209641
+##     soltera nunca novio  147613
 ##                   Total 2307864</code></pre>
 <p>Podemos usar funciones de tabyl</p>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
@@ -26330,10 +26329,10 @@ BD_MUJERES_ENDIREH2016_sample$niv&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$n
 ##            casada-unida  56.4%
 ##    Unida+pareja ausente   1.9%
 ##   Separada o Divorciada  11.3%
-##         Soltera + novio   7.0%
-##                “ con ex   7.9%
-##     soltera nunca novio   9.1%
-##                       7   6.4%
+##                   viuda   7.0%
+##         Soltera + novio   7.9%
+##                “ con ex   9.1%
+##     soltera nunca novio   6.4%
 ##                   Total 100.0%</code></pre>
 </div>
 <div id="otras-formas" class="section level2">
@@ -26379,22 +26378,21 @@ BD_MUJERES_ENDIREH2016_sample$niv&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$n
   pivot_wider(names_from = sit_conyugal, 
               values_from = n)</code></pre>
 <pre><code>## # A tibble: 12 x 8
-##    niv   `casada-unida` `Unida+pareja a~ `Separada o Div~ `Soltera + novi~
-##    &lt;fct&gt;          &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
-##  1 Ning~          92621             2047            12260            48940
-##  2 Pree~           1268               NA              184               80
-##  3 Prim~         360831             9181            65815            72976
-##  4 Secu~         403392            19782            80221            21925
-##  5 Prepa         187513             4464            44733             2544
-##  6 Técn~          10704               NA              436             2086
-##  7 Técn~          42610             1031             7942             6500
-##  8 Técn~          29052             2749             9511             1044
-##  9 Norm~           2896               NA              362              109
-## 10 Norm~          15878               NA             4723             1755
-## 11 Lice~         137698             5089            30506             2988
-## 12 Posg~          16824               NA             3760             1129
-## # ... with 3 more variables: `“ con ex` &lt;dbl&gt;, `soltera nunca novio` &lt;dbl&gt;,
-## #   `7` &lt;dbl&gt;</code></pre>
+##    niv   `casada-unida` `Unida+pareja a~ `Separada o Div~ viuda `Soltera + novi~
+##    &lt;fct&gt;          &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt; &lt;dbl&gt;            &lt;dbl&gt;
+##  1 Ning~          92621             2047            12260 48940              586
+##  2 Pree~           1268               NA              184    80               NA
+##  3 Prim~         360831             9181            65815 72976            12064
+##  4 Secu~         403392            19782            80221 21925            40846
+##  5 Prepa         187513             4464            44733  2544            69190
+##  6 Técn~          10704               NA              436  2086             2828
+##  7 Técn~          42610             1031             7942  6500             2432
+##  8 Técn~          29052             2749             9511  1044             2550
+##  9 Norm~           2896               NA              362   109              105
+## 10 Norm~          15878               NA             4723  1755             7676
+## 11 Lice~         137698             5089            30506  2988            41739
+## 12 Posg~          16824               NA             3760  1129             2435
+## # ... with 2 more variables: `“ con ex` &lt;dbl&gt;, `soltera nunca novio` &lt;dbl&gt;</code></pre>
 <pre class="r"><code>BD_MUJERES_ENDIREH2016_sample %&gt;% 
   mutate_at(vars(sit_conyugal, niv), as_label) %&gt;% # otra forma de mutate y as_label
   count(sit_conyugal, niv,  wt = fac_muj) %&gt;% 
@@ -26403,34 +26401,34 @@ BD_MUJERES_ENDIREH2016_sample$niv&lt;-set_labels(BD_MUJERES_ENDIREH2016_sample$n
    adorn_totals() %&gt;% # Agrega total
      adorn_percentages(&quot;col&quot;)  %&gt;% 
       adorn_pct_formatting()</code></pre>
-<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada
-##         Ninguna         7.1%                 4.6%                  4.7%
-##      Preescolar         0.1%                    -                  0.1%
-##        Primaria        27.7%                20.7%                 25.3%
-##      Secundaria        31.0%                44.6%                 30.8%
-##           Prepa        14.4%                10.1%                 17.2%
-##    Técnico -pri         0.8%                    -                  0.2%
-##    Técnico -sec         3.3%                 2.3%                  3.0%
-##  Técnico -prepa         2.2%                 6.2%                  3.7%
-##          Normal         0.2%                    -                  0.1%
-##      Normal-lic         1.2%                    -                  1.8%
-##    Licenciatura        10.6%                11.5%                 11.7%
-##        Posgrado         1.3%                    -                  1.4%
-##           Total       100.0%               100.0%                100.0%
-##  Soltera + novio “ con ex soltera nunca novio      7
-##            30.2%     0.3%                1.8%   5.8%
-##             0.0%        -                0.1%      -
-##            45.0%     6.6%               12.0%  15.3%
-##            13.5%    22.4%               25.5%  34.6%
-##             1.6%    37.9%               27.4%  28.1%
-##             1.3%     1.6%                0.1%      -
-##             4.0%     1.3%                1.0%   1.8%
-##             0.6%     1.4%                4.1%   2.3%
-##             0.1%     0.1%                   -      -
-##             1.1%     4.2%                1.4%   1.5%
-##             1.8%    22.9%               25.4%   9.3%
-##             0.7%     1.3%                1.2%   1.2%
-##           100.0%   100.0%              100.0% 100.0%</code></pre>
+<pre><code>##             niv casada-unida Unida+pareja ausente Separada o Divorciada  viuda
+##         Ninguna         7.1%                 4.6%                  4.7%  30.2%
+##      Preescolar         0.1%                    -                  0.1%   0.0%
+##        Primaria        27.7%                20.7%                 25.3%  45.0%
+##      Secundaria        31.0%                44.6%                 30.8%  13.5%
+##           Prepa        14.4%                10.1%                 17.2%   1.6%
+##    Técnico -pri         0.8%                    -                  0.2%   1.3%
+##    Técnico -sec         3.3%                 2.3%                  3.0%   4.0%
+##  Técnico -prepa         2.2%                 6.2%                  3.7%   0.6%
+##          Normal         0.2%                    -                  0.1%   0.1%
+##      Normal-lic         1.2%                    -                  1.8%   1.1%
+##    Licenciatura        10.6%                11.5%                 11.7%   1.8%
+##        Posgrado         1.3%                    -                  1.4%   0.7%
+##           Total       100.0%               100.0%                100.0% 100.0%
+##  Soltera + novio “ con ex soltera nunca novio
+##             0.3%     1.8%                5.8%
+##                -     0.1%                   -
+##             6.6%    12.0%               15.3%
+##            22.4%    25.5%               34.6%
+##            37.9%    27.4%               28.1%
+##             1.6%     0.1%                   -
+##             1.3%     1.0%                1.8%
+##             1.4%     4.1%                2.3%
+##             0.1%        -                   -
+##             4.2%     1.4%                1.5%
+##            22.9%    25.4%                9.3%
+##             1.3%     1.2%                1.2%
+##           100.0%   100.0%              100.0%</code></pre>
 </div>
 </div>
 
