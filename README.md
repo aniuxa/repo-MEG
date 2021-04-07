@@ -52,4 +52,4 @@ Bivariado, factores y etiquetas
 
 Código + bivariado y más
 
-[Práctica 4](P24R)
+[Práctica 4](P4.R)
