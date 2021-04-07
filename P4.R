@@ -98,8 +98,6 @@ esquisse:::esquisser()
 # Para hacer un gráfico de barra es mejor hacer un tibble
 
 tab<-mini %>% 
-  count(as_label(p13_1_1), as_label(niv), wt=fac_muj)
+  count(as_label(p13_1_1),niv, wt=fac_muj)
 
-tab
-
-
+tab 
