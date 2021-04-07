@@ -46,3 +46,10 @@ Código + bivariado
 Bivariado, factores y etiquetas
 
 [Práctica 3](P3.md)
+
+
+## Práctica 2
+
+Código + bivariado y más
+
+[Práctica 4](P24R)
