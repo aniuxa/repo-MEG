@@ -53,3 +53,10 @@ Bivariado, factores y etiquetas
 Código + bivariado y más
 
 [Práctica 4](P4.R)
+
+
+## Práctica 5
+
+Índices
+
+[Práctica 5](P5.R)
