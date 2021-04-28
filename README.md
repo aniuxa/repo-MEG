@@ -60,3 +60,10 @@ Código + bivariado y más
 Índices
 
 [Práctica 5](P5.R)
+
+
+## Práctica 6
+
+Ejemplo de análisis descriptivo para el trabajo
+
+[Práctica 6](P6.R)
